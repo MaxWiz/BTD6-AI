@@ -1,0 +1,10 @@
+https://www.rapidtables.com/web/color/RGB_Color.html
+https://www.geeksforgeeks.org/write-a-dictionary-to-a-file-in-python/
+https://www.geeksforgeeks.org/writing-to-file-in-python/
+https://pypi.org/project/pynput/
+https://pyautogui.readthedocs.io/en/latest/screenshot.html
+https://pyautogui.readthedocs.io/en/latest/screenshot.html
+https://www.geeksforgeeks.org/mouse-keyboard-automation-using-python/
+https://www.thepythoncode.com/article/control-mouse-python
+https://www.youtube.com/watch?v=QoEMoSbGvbM
+https://www.autohotkey.com/boards/viewtopic.php?t=71960
