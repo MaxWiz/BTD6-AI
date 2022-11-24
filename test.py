@@ -4,6 +4,8 @@ import pyautogui
 import time
 from pynput.keyboard import Key, Controller
 import numpy
+import operator
+import subprocess
 
 def clickMonkeyMeadow():
     pyautogui.moveTo(534, 230) #Clicks "Monkey Meadow"
@@ -26,18 +28,10 @@ def clickSandbox():
     time.sleep(0.3)
 
 def startBloons():
-    pyautogui.moveTo(659, 1057) #Opens steam
-    pyautogui.click()
-    time.sleep(0.5)
-    pyautogui.moveTo(219, 47) #Opens library
-    pyautogui.click()
-    time.sleep(0.2)
-    pyautogui.moveTo(89, 287) #Opens bloons
-    pyautogui.click()
-    time.sleep(0.2)
-    pyautogui.moveTo(371, 425) #Starts bloons
-    pyautogui.click()
-    time.sleep(7)
+    # subprocess.call(r"D:\Steam\steam.exe -applaunch 960090") # Path for Desktop
+    # time.sleep(7) # Sleep for Desktop
+    subprocess.call(r"D:\Steam\steam.exe -applaunch 960090") # Path for laptop
+    time.sleep(9) # Sleep for laptop
     pyautogui.moveTo(941, 985) #Clicks the start button and gets through the intro
     pyautogui.click()
     time.sleep(1)
@@ -259,8 +253,11 @@ def upgrade3(x, y):
     keyB.release(Key.esc)
 
 def sellTower(x, y):
+    keyB = Controller()
     pyautogui.click(x, y)
-    pyautogui.press('backspace')
+    keyB.press(Key.backspace)
+    time.sleep(0.1)
+    keyB.release(Key.backspace)
     
 def startGame():
     keyB = Controller()
@@ -270,6 +267,15 @@ def startGame():
     keyB.press(Key.space)
     time.sleep(0.1)
     keyB.release(Key.space)
+
+def nextRound():
+    keyB = Controller()
+    keyB.press(Key.space)
+    time.sleep(0.1)
+    keyB.release(Key.space)
+
+def isStopped():
+    return len(list(pyautogui.locateAllOnScreen(r"C:\Users\maxwi\Documents\GitHub\BTD6-AI\start.png"))) != 0
 
 def startMMStandard():
     startBloons()
@@ -283,165 +289,118 @@ def startMMSandbox():
     clickEasy()
     clickSandbox()
 
-def findWidth(x, y):
-    for i in range(66):
-        n = x + i
-        setDart(n, y)
-
-def findHeight(x, y):
-    for j in range(59):
-        m = y + j
-        setDart(x, m)
-
-def findDiag(x, y):
-    setDart(x, y)
-    for i in range(39):
-        n = x + i
-        setDart(n, y - 46)
-        
-def createSquare(x, y):
-    keyB = Controller()
-    for i in range(2):
-        for j in range(2):
-            n = x + i*66
-            m = y + j*59
-            setDart(n, m)
-            pyautogui.moveTo(100, 100)
-            time.sleep(0.1)
-            pix = pyautogui.pixel(n, m)
-            if pix[0] == 255 and pix[1] == 0 and pix[2] == 0:
-                print("invalid")
-            pyautogui.moveTo(1, 1)
-    
-def createSmallGrid(): #For Dart, Tack, Ice, Glue, Sniper, Ninja, Alch
-    Placeable = {}
-    NPlaceable = {}
-    for i in range(66, 1980, 66):
-        for j in range(59, 1080, 59):
-            if (i < 1650 and j >= 118):
-                setDart(i, j) #Check initial
-                pyautogui.moveTo(40, 20)
-                time.sleep(0.1)
-                pix = pyautogui.pixel(i, j)
-                if pix[0] == 255 and pix[1] == 0 and pix[2] == 0:
-                    NPlaceable[(i, j)] = 0
-                else:
-                    Placeable[(i, j)] = 0
-                pyautogui.moveTo(1, 1)
-    file1 = open("D:\School Stuff\Fall 2022\CS 4710 AI\BTD6 AI\MM.txt", "a")
-    file1.write("SmallP: \n")
-    for key, value in Placeable.items():
-        file1.write('%s:%s\n' % (key, value))
-    file1.write("SmallNP: \n")
-    for key, value in NPlaceable.items():
-        file1.write('%s:%s\n' % (key, value))
-    file1.close()
-
-def createMedGrid(): #For Boomerang, Bomb, Dartling, Wizard, Druid, Engineer, Heroes
-    return 0
-
-def createSubGrid(): #For Subs
-    return 0
-
-def createPirateGrid(): #For Pirates
-    return 0
-
-def createLargeGrid(): #For Spikes, Churchill, and Pat Fusty
-    return 0
-
-def createAceGrid(): #For Aces
-    return 0
-
-def createHeliGrid(): #For Helis
-    return 0
-
-def createFarmGrid(): #For Farms
-    return 0
-
-def findBlackPixH(x, y):
-    r = 1/16
-    for i in range(15):
-        m = x + i
-        if pyautogui.pixelMatchesColor(m, y, (0, 0, 0)):
-            r *= 2
-        if pyautogui.pixelMatchesColor(m, y + 1, (0, 0, 0)):
-            r *= 3
-    return r
-
-def findBlackPixV(x, y):
-    r = 1/12
-    for i in range(33):
-        n = y + i
-        if pyautogui.pixelMatchesColor(x, n, (0, 0, 0)):
-            r *= 2
-        if pyautogui.pixelMatchesColor(x + 1, n, (0, 0, 0)):
-            r *= 3
-    return r
-
-def findIntO(x, y):
-    b = findBlackPixH(x, y)
-    print(b)
-    if b == 45:
-        return 0
-    elif b == 102036672:
-        return 1
-    elif b == 1296:
-        return 2
-    elif b == 54:
-        return 3
-    elif b == 1417176:
-        return 4
-    elif b == 20:
-        return 5
-    elif b == 186624:
-        return 6
-    elif b == 228509902503936:
-        return 7
-    elif b == 1889568:
-        return 8
-    elif b == 4251528:
-        return 9
-    else:
-        return None
-
-def findIntT(x, y):
-    b = int(findBlackPixV(x, y))
-    print(b)
-    if b == 3690:
-        return 0
-    elif b == 102036672:
-        return 1
-    elif b == 559872:
-        return 2
-    elif b == 15552:
-        return 3
-    elif b == 6912:
-        return 4
-    elif b == 19042491875328:
-        return 5
-    elif b == 7558272:
-        return 6
-    elif b == 228509902503936:
-        return 7
-    elif b == 1889568:
-        return 8
-    elif b == 4251528:
-        return 9
-    else:
-        return None
-            
-def findRound():
-    hun = findIntO(1481, 33)
-    ten = findIntT(1508, 33)
-    one = findIntO(1541, 33)
-    if hun == None:
-        hun = 0
-    if ten == None:
-        ten = 0
-    if one == None:
-        one = 0
-    r = (100 * hun) + (10 * ten) + (one)
-    return r
+def findNums(): # Maybe alter to take in a screen and then use it per location?
+    ret = [0, 0, 0]
+    lives = {}
+    cash = {}
+    roun = {}
+    gen = {0: {}, 1: {}, 2: {}, 3: {}, 4: {}, 5: {}, 6: {}, 7: {}, 8 : {}, 9: {}}
+    screen = pyautogui.screenshot(region=(0, 0, 1650, 150))
+    zer = pyautogui.locateAll(r"C:\Users\maxwi\Documents\GitHub\BTD6-AI\p0.png", screen, confidence = 0.8)
+    one = pyautogui.locateAll(r"C:\Users\maxwi\Documents\GitHub\BTD6-AI\p1.png", screen, confidence = 0.85)
+    two = pyautogui.locateAll(r"C:\Users\maxwi\Documents\GitHub\BTD6-AI\p2.png", screen, confidence = 0.8)
+    thr = pyautogui.locateAll(r"C:\Users\maxwi\Documents\GitHub\BTD6-AI\p3.png", screen, confidence = 0.8)
+    fou = pyautogui.locateAll(r"C:\Users\maxwi\Documents\GitHub\BTD6-AI\p4.png", screen, confidence = 0.8)
+    fiv = pyautogui.locateAll(r"C:\Users\maxwi\Documents\GitHub\BTD6-AI\p5.png", screen, confidence = 0.8)
+    six = pyautogui.locateAll(r"C:\Users\maxwi\Documents\GitHub\BTD6-AI\p6.png", screen, confidence = 0.8)
+    sev = pyautogui.locateAll(r"C:\Users\maxwi\Documents\GitHub\BTD6-AI\p7.png", screen, confidence = 0.8)
+    eig = pyautogui.locateAll(r"C:\Users\maxwi\Documents\GitHub\BTD6-AI\p8.png", screen, confidence = 0.8)
+    nin = pyautogui.locateAll(r"C:\Users\maxwi\Documents\GitHub\BTD6-AI\p9.png", screen, confidence = 0.8)
+    for a in zer:
+        t = True
+        for z in gen[0].keys():
+            if a[0] < z + 5 and a[0] > z - 5:
+                t = False
+        if t:
+            gen[0][a[0]] = 1
+    for b in one:
+        t = True
+        for o in gen[1].keys():
+            if b[0] < o + 5 and b[0] > o - 5:
+                t = False
+        if t:
+            gen[1][b[0]] = 1
+    for c in two:
+        t = True
+        for tw in gen[2].keys():
+            if c[0] < tw + 5 and c[0] > tw - 5:
+                t = False
+        if t:
+            gen[2][c[0]] = 1
+    for d in thr:
+        t = True
+        for th in gen[3].keys():
+            if d[0] < th + 5 and d[0] > th - 5:
+                t = False
+        if t:
+            gen[3][d[0]] = 1
+    for e in fou:
+        t = True
+        for fo in gen[4].keys():
+            if e[0] < fo + 5 and e[0] > fo - 5:
+                t = False
+        if t:
+            gen[4][e[0]] = 1
+    for f in fiv:
+        t = True
+        for fi in gen[5].keys():
+            if f[0] < fi + 5 and f[0] > fi - 5:
+                t = False
+        if t:
+            gen[5][f[0]] = 1
+    for g in six:
+        t = True
+        for si in gen[6].keys():
+            if g[0] < si + 5 and g[0] > si - 5:
+                t = False
+        if t:
+            gen[6][g[0]] = 1
+    for h in sev:
+        t = True
+        for se in gen[7].keys():
+            if h[0] < se + 5 and h[0] > se - 5:
+                t = False
+        if t:
+            gen[7][h[0]] = 1
+    for i in eig:
+        t = True
+        for ei in gen[8].keys():
+            if i[0] < ei + 5 and i[0] > ei - 5:
+                t = False
+        if t:
+            gen[8][i[0]] = 1
+    for j in nin:
+        t = True
+        for ni in gen[9].keys():
+            if j[0] < ni + 5 and j[0] > ni - 5:
+                t = False
+        if t:
+            gen[9][j[0]] = 1
+    for it in gen.keys():
+        if len(gen[it]) != 0:
+            for ite in gen[it].keys():
+                if ite < 275:
+                    lives[ite] = it
+                if ite < 700 and ite > 275:
+                    cash[ite] = it
+                if ite > 1000 and ite < 1500:
+                    roun[ite] = it
+    livesS = sorted(lives.items(), key=operator.itemgetter(0), reverse=True)
+    cashS = sorted(cash.items(), key=operator.itemgetter(0), reverse=True)
+    rounS = sorted(roun.items(), key=operator.itemgetter(0), reverse=True)
+    k = 0
+    for liv in livesS:
+        ret[0] += liv[1] * (10 ** k)
+        k+=1
+    l = 0
+    for cas in cashS:
+        ret[1] += cas[1] * (10 ** l)
+        l+=1
+    m = 0
+    for rou in rounS:
+        ret[2] += rou[1] * (10 ** m)
+        m+=1
+    return ret # returned as lives, cash, and round
 
 print(pyautogui.size())
 time.sleep(2)
@@ -450,10 +409,6 @@ print(pyautogui.position())
 # startMMSandbox()
 # time.sleep(5)
 # createSmallGrid()
-# findBlackPix(1535, 33)
-# x = findRound()
-# print("Round: ")
-# print(x)
-t = pyautogui.locateAllOnScreen("D:\School Stuff\Fall 2022\CS 4710 AI\BTD6 AI\p1.png", confidence = 0.9)
-for p in t:
-    print(p)
+# print(findNums())
+# print(findWidth(1000, 100))
+# print(findHeight(1000, 100))
