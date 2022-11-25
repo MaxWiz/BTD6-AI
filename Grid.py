@@ -2,43 +2,43 @@ import pyautogui
 import time
 from pynput.keyboard import Key, Controller
 import numpy
-from test import *
+import main
 
 def findWidth(x, y):
     n = x
-    setAce(x, y)
-    setAce(x, y)
+    main.setAce((x, y))
+    main.setAce((x, y))
     pix = pyautogui.pixel(x, y+37)
     print(pix)
     while pix[0] == 255 and pix[1] == 0 and pix[2] == 0 and n-x < 200:
         n += 1
-        setAce(n, y)
+        main.setAce((n, y))
         pix = pyautogui.pixel(n, y+37)
-    sellTower(x, y)
-    sellTower(n, y)
+    main.sellTower((x, y))
+    main.sellTower((n, y))
     return n-x
 
 def findHeight(x, y):
     m = y
-    setAce(x, y)
-    setAce(x, y)
+    main.setAce((x, y))
+    main.setAce((x, y))
     pix = pyautogui.pixel(x, y+37)
     while pix[0] == 255 and pix[1] == 0 and pix[2] == 0 and m-y < 200:
         m += 1
-        setAce(x, m)
+        main.setAce((x, m))
         pix = pyautogui.pixel(x, m+37)
-    sellTower(x, y)
-    sellTower(x, m)
+    main.sellTower((x, y))
+    main.sellTower((x, m))
     return m-y
 
 def findDiag(x, y):
-    setDart(x, y)
+    main.setDart((x, y))
     for i in range(39):
         n = x + i
-        setDart(n, y - 46)
+        main.setDart((n, y - 46))
 
 def findRed():
-    setAce(1300, 500)
+    main.setAce((1300, 500))
     for j in range(100):
         if pyautogui.pixel(1300, 500+j)[0] == 255 and pyautogui.pixel(1300, 500+j)[1] == 0 and pyautogui.pixel(1300, 500+j)[2] == 0:
             return j
@@ -49,7 +49,7 @@ def createSquare(x, y):
         for j in range(2):
             n = x + i*66
             m = y + j*59
-            setDart(n, m)
+            main.setDart((n, m))
             pyautogui.moveTo(100, 100)
             time.sleep(0.1)
             pix = pyautogui.pixel(n, m)
@@ -63,7 +63,7 @@ def createSmallGrid(): #For Dart, Tack, Ice, Glue, Sniper, Ninja, Alch
     for i in range(66, 1980, 66):
         for j in range(59, 1080, 59):
             if (i < 1650 and j >= 118):
-                setDart(i, j) #Check initial
+                main.setDart((i,j)) #Check initial
                 pyautogui.moveTo(40, 20)
                 time.sleep(0.1)
                 pix = pyautogui.pixel(i, j)
@@ -73,12 +73,11 @@ def createSmallGrid(): #For Dart, Tack, Ice, Glue, Sniper, Ninja, Alch
                     Placeable[(i, j)] = 0
                 pyautogui.moveTo(1, 1)
     file1 = open(r"C:\Users\maxwi\Documents\GitHub\BTD6-AI\MMSm.txt", "a")
-    file1.write("P: \n")
-    for key in Placeable.items():
-        file1.write('%s:%s\n' % (key))
-    file1.write("NP: \n")
-    for key in NPlaceable.items():
-        file1.write('%s:%s\n' % (key))
+    for key in Placeable.keys():
+        file1.write(str(key) + "\n") 
+    file1.write("\n")
+    for key in NPlaceable.keys():
+        file1.write(str(key) + "\n")
     file1.close()
 
 def createMedGrid(): #For Boomerang, Bomb, Dartling, Wizard, Druid, Engineer, Heroes
@@ -91,7 +90,7 @@ def createMedGrid(): #For Boomerang, Bomb, Dartling, Wizard, Druid, Engineer, He
     for i in range(x, 1980, x):
         for j in range(y, 1080, y):
             if (i < 1650 and j >= 118):
-                setBoomerang(i, j) #Check initial
+                main.setBoomerang((i, j)) #Check initial
                 pyautogui.moveTo(40, 20)
                 time.sleep(0.1)
                 pix = pyautogui.pixel(i, j)
@@ -101,12 +100,11 @@ def createMedGrid(): #For Boomerang, Bomb, Dartling, Wizard, Druid, Engineer, He
                     Placeable[(i, j)] = 0
                 pyautogui.moveTo(1, 1)
     file1 = open(r"C:\Users\maxwi\Documents\GitHub\BTD6-AI\MMMe.txt", "a")
-    file1.write("P: \n")
-    for key in Placeable.items():
-        file1.write('%s:%s\n' % (key))
-    file1.write("NP: \n")
-    for key in NPlaceable.items():
-        file1.write('%s:%s\n' % (key))
+    for key in Placeable.keys():
+        file1.write(str(key) + "\n")
+    file1.write("\n")
+    for key in NPlaceable.keys():
+        file1.write(str(key) + "\n")
     file1.close()
 
 def createSubGrid(): #For Subs
@@ -123,7 +121,7 @@ def createLargeGrid(): #For Spikes, Churchill, and Pat Fusty
     for i in range(x, 1980, x):
         for j in range(y, 1080, y):
             if (i < 1650 and j >= 118):
-                setSpike(i, j) #Check initial
+                main.setSpike((i, j)) #Check initial
                 pyautogui.moveTo(40, 20)
                 time.sleep(0.1)
                 pix = pyautogui.pixel(i, j)
@@ -133,12 +131,11 @@ def createLargeGrid(): #For Spikes, Churchill, and Pat Fusty
                     Placeable[(i, j)] = 0
                 pyautogui.moveTo(1, 1)
     file1 = open(r"C:\Users\maxwi\Documents\GitHub\BTD6-AI\MMLa.txt", "a")
-    file1.write("P: \n")
-    for key in Placeable.items():
-        file1.write('%s:%s\n' % (key))
-    file1.write("NP: \n")
-    for key in NPlaceable.items():
-        file1.write('%s:%s\n' % (key))
+    for key in Placeable.keys():
+        file1.write(str(key) + "\n")
+    file1.write("\n")
+    for key in NPlaceable.keys():
+        file1.write(str(key) + "\n")
     file1.close()
 
 def createAceGrid(): #For Aces
@@ -149,7 +146,7 @@ def createAceGrid(): #For Aces
     for i in range(x, 1980, x):
         for j in range(y, 1080, y):
             if (i < 1650 and j >= 118):
-                setAce(i, j) #Check initial
+                main.setAce((i, j)) #Check initial
                 pyautogui.moveTo(40, 20)
                 time.sleep(0.1)
                 pix = pyautogui.pixel(i, j+37)
@@ -159,12 +156,11 @@ def createAceGrid(): #For Aces
                     Placeable[(i, j)] = 0
                 pyautogui.moveTo(1, 1)
     file1 = open(r"C:\Users\maxwi\Documents\GitHub\BTD6-AI\MMAc.txt", "a")
-    file1.write("P: \n")
-    for key in Placeable.items():
-        file1.write('%s:%s\n' % (key))
-    file1.write("NP: \n")
-    for key in NPlaceable.items():
-        file1.write('%s:%s\n' % (key))
+    for key in Placeable.keys():
+        file1.write(str(key) + "\n")
+    file1.write("\n")
+    for key in NPlaceable.keys():
+        file1.write(str(key) + "\n")
     file1.close()
 
 def createHeliGrid(): #For Helis
@@ -175,7 +171,7 @@ def createHeliGrid(): #For Helis
     for i in range(x, 1980, x):
         for j in range(y, 1080, y):
             if (i < 1650 and j >= 118):
-                setHeli(i, j) #Check initial
+                main.setHeli((i, j)) #Check initial
                 pyautogui.moveTo(40, 20)
                 time.sleep(0.1)
                 pix = pyautogui.pixel(i, j+58)
@@ -185,15 +181,12 @@ def createHeliGrid(): #For Helis
                     Placeable[(i, j)] = 0
                 pyautogui.moveTo(1, 1)
     file1 = open(r"C:\Users\maxwi\Documents\GitHub\BTD6-AI\MMHe.txt", "a")
-    file1.write("P: \n")
-    for key in Placeable.items():
-        file1.write('%s:%s\n' % (key))
-    file1.write("NP: \n")
-    for key in NPlaceable.items():
-        file1.write('%s:%s\n' % (key))
+    for key in Placeable.keys():
+        file1.write(str(key) + "\n")
+    file1.write("\n")
+    for key in NPlaceable.keys():
+        file1.write(str(key) + "\n")
     file1.close()
 
 def createFarmGrid(): #For Farms
     return 0
-
-setHeli(1000, 200)
