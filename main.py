@@ -1,6 +1,6 @@
 # test.py
 
-from turtle import position
+from turtle import pos, position
 import pyautogui
 import time
 from pynput.keyboard import Key, Controller
@@ -58,215 +58,79 @@ def startMMSandbox():
     clickSandbox()
 
 ##################################### SETTER COMMANDS #####################################
+
+def getMonkeyButton(index):
+    if index == 0: # Hero
+        return "u"
+    if index == 1: # Dart
+        return "q"
+    if index == 2: # Boomerang
+        return "w"
+    if index == 3: # Bomb
+        return "e"
+    if index == 4: # Tack
+        return "r"
+    if index == 5: # Ice
+        return "t"
+    if index == 6: # Glue
+        return "y"
+    if index == 7: # Sniper
+        return "z"
+    if index == 8: # Sub
+        return "x"
+    if index == 9: # Pirate
+        return "c"
+    if index == 10: # Ace
+        return "v"
+    if index == 11: # Heli
+        return "b"
+    if index == 12: # Mortar
+        return "n"
+    if index == 13: # Dartling
+        return "m"
+    if index == 14: # Wizard
+        return "a"
+    if index == 15: # Super
+        return "s"
+    if index == 16: # Ninja
+        return "d"
+    if index == 17: # Alch
+        return "f"
+    if index == 18: # Druid
+        return "g"
+    if index == 19: # Farm
+        return "h"
+    if index == 20: # Spike
+        return "j"
+    if index == 21: # Village
+        return "k"
+    if index == 22: # Engi
+        return "l"
     
-def setHero(point):
+def setMonkey(index, point):
     keyB = Controller()
     pyautogui.moveTo(point[0], point[1])
-    keyB.press('u')
-    keyB.release('u')
+    key = getMonkeyButton(index)
+    keyB.press(key)
+    keyB.release(key)
     time.sleep(0.1)
     pyautogui.click(point[0], point[1])
 
-def setDart(point):
-    keyB = Controller()
-    pyautogui.moveTo(point[0], point[1])
-    keyB.press('q')
-    keyB.release('q')
-    time.sleep(0.1)
-    pyautogui.click(point[0], point[1])
+def getUpgradeButton(index):
+    if index == 1:
+        return ","
+    if index == 2:
+        return "."
+    if index == 3:
+        return "/"
 
-def setBoomerang(point):
-    keyB = Controller()
-    pyautogui.moveTo(point[0], point[1])
-    keyB.press('w')
-    keyB.release('w')
-    time.sleep(0.1)
-    pyautogui.click(point[0], point[1])
-
-def setBomb(point):
-    keyB = Controller()
-    pyautogui.moveTo(point[0], point[1])
-    keyB.press('e')
-    keyB.release('e')
-    time.sleep(0.1)
-    pyautogui.click(point[0], point[1])
-
-def setTack(point):
-    keyB = Controller()
-    pyautogui.moveTo(point[0], point[1])
-    keyB.press('r')
-    keyB.release('r')
-    time.sleep(0.1)
-    pyautogui.click(point[0], point[1])
-
-def setIce(point):
-    keyB = Controller()
-    pyautogui.moveTo(point[0], point[1])
-    keyB.press('t')
-    keyB.release('t')
-    time.sleep(0.1)
-    pyautogui.click(point[0], point[1])
-
-def setGlue(point):
-    keyB = Controller()
-    pyautogui.moveTo(point[0], point[1])
-    keyB.press('y')
-    keyB.release('y')
-    time.sleep(0.1)
-    pyautogui.click(point[0], point[1])
-
-def setSniper(point):
-    keyB = Controller()
-    pyautogui.moveTo(point[0], point[1])
-    keyB.press('z')
-    keyB.release('z')
-    time.sleep(0.1)
-    pyautogui.click(point[0], point[1])
-
-def setSub(point):
-    keyB = Controller()
-    pyautogui.moveTo(point[0], point[1])
-    keyB.press('x')
-    keyB.release('x')
-    time.sleep(0.1)
-    pyautogui.click(point[0], point[1])
-
-def setPirate(point):
-    keyB = Controller()
-    pyautogui.moveTo(point[0], point[1])
-    keyB.press('c')
-    keyB.release('c')
-    time.sleep(0.1)
-    pyautogui.click(point[0], point[1])
-
-def setAce(point):
-    keyB = Controller()
-    pyautogui.moveTo(point[0], point[1])
-    keyB.press('v')
-    keyB.release('v')
-    time.sleep(0.1)
-    pyautogui.click(point[0], point[1])
-
-def setHeli(point):
-    keyB = Controller()
-    pyautogui.moveTo(point[0], point[1])
-    keyB.press('b')
-    keyB.release('b')
-    time.sleep(0.1)
-    pyautogui.click(point[0], point[1])
-
-def setMortar(point):
-    keyB = Controller()
-    pyautogui.moveTo(point[0], point[1])
-    keyB.press('n')
-    keyB.release('n')
-    time.sleep(0.1)
-    pyautogui.click(point[0], point[1])
-
-def setDartling(point):
-    keyB = Controller()
-    pyautogui.moveTo(point[0], point[1])
-    keyB.press('m')
-    keyB.release('m')
-    time.sleep(0.1)
-    pyautogui.click(point[0], point[1])
-
-def setWizard(point):
-    keyB = Controller()
-    pyautogui.moveTo(point[0], point[1])
-    keyB.press('a')
-    keyB.release('a')
-    time.sleep(0.1)
-    pyautogui.click(point[0], point[1])
-
-def setSuper(point):
-    keyB = Controller()
-    pyautogui.moveTo(point[0], point[1])
-    keyB.press('s')
-    keyB.release('s')
-    time.sleep(0.1)
-    pyautogui.click(point[0], point[1])
-
-def setNinja(point):
-    keyB = Controller()
-    pyautogui.moveTo(point[0], point[1])
-    keyB.press('d')
-    keyB.release('d')
-    time.sleep(0.1)
-    pyautogui.click(point[0], point[1])
-
-def setAlch(point):
-    keyB = Controller()
-    pyautogui.moveTo(point[0], point[1])
-    keyB.press('f')
-    keyB.release('f')
-    time.sleep(0.1)
-    pyautogui.click(point[0], point[1])
-
-def setDruid(point):
-    keyB = Controller()
-    pyautogui.moveTo(point[0], point[1])
-    keyB.press('g')
-    keyB.release('g')
-    time.sleep(0.1)
-    pyautogui.click(point[0], point[1])
-
-def setFarm(point):
-    keyB = Controller()
-    pyautogui.moveTo(point[0], point[1])
-    keyB.press('h')
-    keyB.release('h')
-    time.sleep(0.1)
-    pyautogui.click(point[0], point[1])
-
-def setSpike(point):
-    keyB = Controller()
-    pyautogui.moveTo(point[0], point[1])
-    keyB.press('j')
-    keyB.release('j')
-    time.sleep(0.1)
-    pyautogui.click(point[0], point[1])
-
-def setVillage(point):
-    keyB = Controller()
-    pyautogui.moveTo(point[0], point[1])
-    keyB.press('k')
-    keyB.release('k')
-    time.sleep(0.1)
-    pyautogui.click(point[0], point[1])
-
-def setEngineer(point):
-    keyB = Controller()
-    pyautogui.moveTo(point[0], point[1])
-    keyB.press('l')
-    keyB.release('l')
-    time.sleep(0.1)
-    pyautogui.click(point[0], point[1])
-
-def upgrade1(point):
+def upgrade(index, point):
     keyB = Controller()
     pyautogui.click(point[0], point[1])
-    keyB.press(',')
+    key = getUpgradeButton(index)
+    keyB.press(key)
     time.sleep(0.1)
-    keyB.release(',')
-    keyB.press(Key.esc)
-    keyB.release(Key.esc)
-
-def upgrade2(point):
-    keyB = Controller()
-    pyautogui.click(point[0], point[1])
-    keyB.press('.')
-    time.sleep(0.1)
-    keyB.release('.')
-    keyB.press(Key.esc)
-    keyB.release(Key.esc)
-
-def upgrade3(point):
-    keyB = Controller()
-    pyautogui.click(point[0], point[1])
-    keyB.press('/')
-    time.sleep(0.1)
-    keyB.release('/')
+    keyB.release(key)
     keyB.press(Key.esc)
     keyB.release(Key.esc)
 
@@ -295,7 +159,8 @@ def nextRound():
 ##################################### SCREEN READING COMMANDS #####################################
 
 def isStopped():
-    return len(list(pyautogui.locateAllOnScreen(r"C:\Users\maxwi\Documents\GitHub\BTD6-AI\start.png"))) != 0
+    screen = pyautogui.screenshot(region=(1650, 950, 330, 130))
+    return len(list(pyautogui.locateAll(r"C:\Users\maxwi\Documents\GitHub\BTD6-AI\start.png", screen))) != 0
 
 def findNums(): # Maybe alter to take in a screen and then use it per location?
     ret = [0, 0, 0]
@@ -541,27 +406,12 @@ def upgradeListEasy():
 ##################################### CLASSES #####################################
 
 class Monkey:
-    def __init__(self, name, position, index):
+    
+    def __init__(self, position, index):
         self.upgrades = [0, 0, 0]
-        self.name = name # Maybe unneeded?
+        self.name = "" # Maybe unneeded?
         self.position = position
         self.PUindex = index
-
-    def upgrade(self, index):
-        if not self.upgrades[index] == None:
-            if index == 0:
-                upgrade1(self.position)
-            if index == 1:
-                upgrade2(self.position)
-            if index == 2:
-                upgrade3(self.position)
-            self.upgrades[index] += 1
-            if self.upgrades[0] >= 1 and self.upgrades[1] >= 1:
-                self.upgrades[2] = None
-            if self.upgrades[1] >= 1 and self.upgrades[2] >= 1:
-                self.upgrades[0] = None
-            if self.upgrades[0] >= 1 and self.upgrades[2] >= 1:
-                self.upgrades[1] = None
 
 class Player:
 
@@ -584,31 +434,182 @@ class Player:
     
     def availUpgrades(self, cash):
         uList = []
-        for m in self.monkeys:
+        for m in self.monkeys: # Iterate through all the monkeys we have set down
             up = m.upgrades
             i = m.PUindex
-            for j in range(2):
-                k = up[j] + 1
-                if self.upgradeList[i][j][k] <= cash:
-                    z = (m, j)
-                    uList.append(z)
+            for j in range(2): # Iterate through all possible upgrades
+                if not up[j] == None: # Check that it is not an impossible upgrade
+                    k = up[j] + 1
+                    if self.upgradeList[i][j][k] <= cash: # Check that we can afford it
+                        z = (m, j)
+                        uList.append(z)
         return uList
     
     def availPlacement(self, cash):
         pList = []
-        for puInd in range(len(self.priceList)):
-            if self.priceList[puInd] <= cash:
+        for puInd in range(len(self.priceList)): 
+            if self.priceList[puInd] <= cash: # Just check what monkeys we have money for
                 pList.append(puInd)
         return pList
+    
+    def upgradeM(self, monkey, index):
+        if not self.upgrades[index] == None:
+            upgrade(index, monkey.position)
+            monkey.upgrades[index] += 1
+            self.cash -= self.upgradeList[monkey.PUindex][index][monkey.upgrades[index]]
+            if monkey.upgrades[0] >= 1 and monkey.upgrades[1] >= 1:
+                monkey.upgrades[2] = None
+            if monkey.upgrades[1] >= 1 and monkey.upgrades[2] >= 1:
+                monkey.upgrades[0] = None
+            if monkey.upgrades[0] >= 1 and monkey.upgrades[2] >= 1:
+                monkey.upgrades[1] = None
+
+    def placeM(self, position, puIndex):
+        setMonkey(puIndex, position)
+        if grid.findRed(position) == None:
+            m = Monkey(position, puIndex)
+            self.monkeys.append(m)
+            self.removeSpaces(position, puIndex)
+            self.cash -= self.priceList[puIndex]
+        else:
+            print("UH OH")
+            return None
+
+    def removeSpaces(self, position, index):
+        x = position[0]
+        y = position[1]
+        if index == 1 or index == 4 or index ==  5 or index == 6 or index == 7 or index == 16 or index == 17: # Small Monkeys
+            for i in range(len(self.SmGrid)):
+                if self.SmGrid[i][0] <= x + 66 and self.SmGrid[i][0] >= x - 66 and self.SmGrid[i][1] <= y + 59 and self.SmGrid[i][1] >= y - 59:
+                    self.SmGrid.pop(i)
+            for j in range(len(self.MeGrid)):
+                if self.MeGrid[j][0] <= x + 66 and self.MeGrid[j][0] >= x - 66 and self.MeGrid[j][1] <= y + 59 and self.MeGrid[j][1] >= y - 59:
+                    self.MeGrid.pop(j)
+            for k in range(len(self.LaGrid)):
+                if self.LaGrid[k][0] <= x + 66 and self.LaGrid[k][0] >= x - 66 and self.LaGrid[k][1] <= y + 59 and self.LaGrid[k][1] >= y - 59:
+                    self.LaGrid.pop(k)
+            for m in range(len(self.AcGrid)):
+                if self.AcGrid[m][0] <= x + 66 and self.AcGrid[m][0] >= x - 66 and self.AcGrid[m][1] <= y + 59 and self.AcGrid[m][1] >= y - 59:
+                    self.AcGrid.pop(m)
+            for n in range(len(self.HeGrid)):
+                if self.HeGrid[n][0] <= x + 66 and self.HeGrid[n][0] >= x - 66 and self.HeGrid[n][1] <= y + 59 and self.HeGrid[n][1] >= y - 59:
+                    self.HeGrid.pop(n)
+        if index == 2 or index == 3 or index ==  13 or index == 14 or index == 18 or index == 22 or index == 0: # Medium Monkeys
+            for i in range(len(self.SmGrid)):
+                if self.SmGrid[i][0] <= x + 77 and self.SmGrid[i][0] >= x - 77 and self.SmGrid[i][1] <= y + 67 and self.SmGrid[i][1] >= y - 67:
+                    self.SmGrid.pop(i)
+            for j in range(len(self.MeGrid)):
+                if self.MeGrid[j][0] <= x + 77 and self.MeGrid[j][0] >= x - 77 and self.MeGrid[j][1] <= y + 67 and self.MeGrid[j][1] >= y - 67:
+                    self.MeGrid.pop(j)
+            for k in range(len(self.LaGrid)):
+                if self.LaGrid[k][0] <= x + 77 and self.LaGrid[k][0] >= x - 77 and self.LaGrid[k][1] <= y + 67 and self.LaGrid[k][1] >= y - 67:
+                    self.LaGrid.pop(k)
+            for m in range(len(self.AcGrid)):
+                if self.AcGrid[m][0] <= x + 77 and self.AcGrid[m][0] >= x - 77 and self.AcGrid[m][1] <= y + 67 and self.AcGrid[m][1] >= y - 67:
+                    self.AcGrid.pop(m)
+            for n in range(len(self.HeGrid)):
+                if self.HeGrid[n][0] <= x + 77 and self.HeGrid[n][0] >= x - 77 and self.HeGrid[n][1] <= y + 67 and self.HeGrid[n][1] >= y - 67:
+                    self.HeGrid.pop(n)
+        if index == 20: # Large Monkeys
+            for i in range(len(self.SmGrid)):
+                if self.SmGrid[i][0] <= x + 87 and self.SmGrid[i][0] >= x - 87 and self.SmGrid[i][1] <= y + 75 and self.SmGrid[i][1] >= y - 75:
+                    self.SmGrid.pop(i)
+            for j in range(len(self.MeGrid)):
+                if self.MeGrid[j][0] <= x + 87 and self.MeGrid[j][0] >= x - 87 and self.MeGrid[j][1] <= y + 75 and self.MeGrid[j][1] >= y - 75:
+                    self.MeGrid.pop(j)
+            for k in range(len(self.LaGrid)):
+                if self.LaGrid[k][0] <= x + 87 and self.LaGrid[k][0] >= x - 87 and self.LaGrid[k][1] <= y + 75 and self.LaGrid[k][1] >= y - 75:
+                    self.LaGrid.pop(k)
+            for m in range(len(self.AcGrid)):
+                if self.AcGrid[m][0] <= x + 87 and self.AcGrid[m][0] >= x - 87 and self.AcGrid[m][1] <= y + 75 and self.AcGrid[m][1] >= y - 75:
+                    self.AcGrid.pop(m)
+            for n in range(len(self.HeGrid)):
+                if self.HeGrid[n][0] <= x + 87 and self.HeGrid[n][0] >= x - 87 and self.HeGrid[n][1] <= y + 75 and self.HeGrid[n][1] >= y - 75:
+                    self.HeGrid.pop(n)
+        if index == 10: # Ace Monkeys
+            for i in range(len(self.SmGrid)):
+                if self.SmGrid[i][0] <= x + 152 and self.SmGrid[i][0] >= x - 152 and self.SmGrid[i][1] <= y + 85 and self.SmGrid[i][1] >= y - 85:
+                    self.SmGrid.pop(i)
+            for j in range(len(self.MeGrid)):
+                if self.MeGrid[j][0] <= x + 152 and self.MeGrid[j][0] >= x - 152 and self.MeGrid[j][1] <= y + 85 and self.MeGrid[j][1] >= y - 85:
+                    self.MeGrid.pop(j)
+            for k in range(len(self.LaGrid)):
+                if self.LaGrid[k][0] <= x + 152 and self.LaGrid[k][0] >= x - 152 and self.LaGrid[k][1] <= y + 85 and self.LaGrid[k][1] >= y - 85:
+                    self.LaGrid.pop(k)
+            for m in range(len(self.AcGrid)):
+                if self.AcGrid[m][0] <= x + 152 and self.AcGrid[m][0] >= x - 152 and self.AcGrid[m][1] <= y + 85 and self.AcGrid[m][1] >= y - 85:
+                    self.AcGrid.pop(m)
+            for n in range(len(self.HeGrid)):
+                if self.HeGrid[n][0] <= x + 152 and self.HeGrid[n][0] >= x - 152 and self.HeGrid[n][1] <= y + 85 and self.HeGrid[n][1] >= y - 85:
+                    self.HeGrid.pop(n)
+        if index == 11: # Heli Monkeys
+            for i in range(len(self.SmGrid)):
+                if self.SmGrid[i][0] <= x + 146 and self.SmGrid[i][0] >= x - 146 and self.SmGrid[i][1] <= y + 127 and self.SmGrid[i][1] >= y - 127:
+                    self.SmGrid.pop(i)
+            for j in range(len(self.MeGrid)):
+                if self.MeGrid[j][0] <= x + 146 and self.MeGrid[j][0] >= x - 146 and self.MeGrid[j][1] <= y + 127 and self.MeGrid[j][1] >= y - 127:
+                    self.MeGrid.pop(j)
+            for k in range(len(self.LaGrid)):
+                if self.LaGrid[k][0] <= x + 146 and self.LaGrid[k][0] >= x - 146 and self.LaGrid[k][1] <= y + 127 and self.LaGrid[k][1] >= y - 127:
+                    self.LaGrid.pop(k)
+            for m in range(len(self.AcGrid)):
+                if self.AcGrid[m][0] <= x + 146 and self.AcGrid[m][0] >= x - 146 and self.AcGrid[m][1] <= y + 127 and self.AcGrid[m][1] >= y - 127:
+                    self.AcGrid.pop(m)
+            for n in range(len(self.HeGrid)):
+                if self.HeGrid[n][0] <= x + 146 and self.HeGrid[n][0] >= x - 146 and self.HeGrid[n][1] <= y + 127 and self.HeGrid[n][1] >= y - 127:
+                    self.HeGrid.pop(n)
 
 ##################################### MAIN #####################################
 
 def main():
-    # with open(r"C:\Users\maxwi\Documents\GitHub\BTD6-AI\MMSm.txt", "r") as fSm:
-    #     line = fSm.readline()
-    #     while(line != ""):
-    #         l = line[1:]
-    grid.createLargeGrid()
+    smL = []
+    meL = []
+    laL = []
+    acL = []
+    heL = []
+    pL = priceListEasy()
+    uL = upgradeListEasy()
+    Player1 = Player(pL, uL)
+    with open(r"C:\Users\maxwi\Documents\GitHub\BTD6-AI\MMSm.txt", "r") as fSm:
+        line = fSm.readline()
+        while(line != "\n"):
+            l = line.replace("(", "").replace(")", "").replace("\n", "").replace(" ", "").split(",")
+            p = (int(l[0]), int(l[1]))
+            smL.append(p)
+            line = fSm.readline()
+    with open(r"C:\Users\maxwi\Documents\GitHub\BTD6-AI\MMMe.txt", "r") as fMe:
+        line = fMe.readline()
+        while(line != "\n"):
+            l = line.replace("(", "").replace(")", "").replace("\n", "").replace(" ", "").split(",")
+            p = (int(l[0]), int(l[1]))
+            meL.append(p)
+            line = fMe.readline()
+    with open(r"C:\Users\maxwi\Documents\GitHub\BTD6-AI\MMLa.txt", "r") as fLa:
+        line = fLa.readline()
+        while(line != "\n"):
+            l = line.replace("(", "").replace(")", "").replace("\n", "").replace(" ", "").split(",")
+            p = (int(l[0]), int(l[1]))
+            laL.append(p)
+            line = fLa.readline()
+    with open(r"C:\Users\maxwi\Documents\GitHub\BTD6-AI\MMAc.txt", "r") as fAc:
+        line = fAc.readline()
+        while(line != "\n"):
+            l = line.replace("(", "").replace(")", "").replace("\n", "").replace(" ", "").split(",")
+            p = (int(l[0]), int(l[1]))
+            acL.append(p)
+            line = fAc.readline()
+    with open(r"C:\Users\maxwi\Documents\GitHub\BTD6-AI\MMHe.txt", "r") as fHe:
+        line = fHe.readline()
+        while(line != "\n"):
+            l = line.replace("(", "").replace(")", "").replace("\n", "").replace(" ", "").split(",")
+            p = (int(l[0]), int(l[1]))
+            heL.append(p)
+            line = fHe.readline()
+    Player1.SmGrid = smL
+    Player1.MeGrid = meL
+    Player1.LaGrid = laL
+    Player1.AcGrid = acL
+    Player1.HeGrid = heL
     return 0
 
 if __name__ == "__main__":

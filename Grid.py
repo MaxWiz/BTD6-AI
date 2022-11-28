@@ -6,13 +6,13 @@ import main
 
 def findWidth(x, y):
     n = x
-    main.setAce((x, y))
-    main.setAce((x, y))
+    main.setMonkey(10 ,(x, y))
+    main.setMonkey(10, (x, y))
     pix = pyautogui.pixel(x, y+37)
     print(pix)
     while pix[0] == 255 and pix[1] == 0 and pix[2] == 0 and n-x < 200:
         n += 1
-        main.setAce((n, y))
+        main.setMonkey(10, (n, y))
         pix = pyautogui.pixel(n, y+37)
     main.sellTower((x, y))
     main.sellTower((n, y))
@@ -20,36 +20,35 @@ def findWidth(x, y):
 
 def findHeight(x, y):
     m = y
-    main.setAce((x, y))
-    main.setAce((x, y))
+    main.setMonkey(10, (x, y))
+    main.setMonkey(10, (x, y))
     pix = pyautogui.pixel(x, y+37)
     while pix[0] == 255 and pix[1] == 0 and pix[2] == 0 and m-y < 200:
         m += 1
-        main.setAce((x, m))
+        main.setMonkey(10, (x, m))
         pix = pyautogui.pixel(x, m+37)
     main.sellTower((x, y))
     main.sellTower((x, m))
     return m-y
 
 def findDiag(x, y):
-    main.setDart((x, y))
+    main.setMonkey(1, (x, y))
     for i in range(39):
         n = x + i
-        main.setDart((n, y - 46))
+        main.setMonkey(1, (n, y - 46))
 
-def findRed():
-    main.setAce((1300, 500))
-    for j in range(100):
-        if pyautogui.pixel(1300, 500+j)[0] == 255 and pyautogui.pixel(1300, 500+j)[1] == 0 and pyautogui.pixel(1300, 500+j)[2] == 0:
+def findRed(pos):
+    for j in range(50):
+        if pyautogui.pixel(pos[0], pos[1]+j)[0] == 255 and pyautogui.pixel(pos[0], pos[1]+j)[1] == 0 and pyautogui.pixel(pos[0], pos[1]+j)[2] == 0:
             return j
+    return None
         
 def createSquare(x, y):
-    keyB = Controller()
     for i in range(2):
         for j in range(2):
             n = x + i*66
             m = y + j*59
-            main.setDart((n, m))
+            main.setMonkey(1, (n, m))
             pyautogui.moveTo(100, 100)
             time.sleep(0.1)
             pix = pyautogui.pixel(n, m)
@@ -63,7 +62,7 @@ def createSmallGrid(): #For Dart, Tack, Ice, Glue, Sniper, Ninja, Alch
     for i in range(66, 1980, 66):
         for j in range(59, 1080, 59):
             if (i < 1650 and j >= 118):
-                main.setDart((i,j)) #Check initial
+                main.setMonkey(1, (i,j)) #Check initial
                 pyautogui.moveTo(40, 20)
                 time.sleep(0.1)
                 pix = pyautogui.pixel(i, j)
@@ -90,7 +89,7 @@ def createMedGrid(): #For Boomerang, Bomb, Dartling, Wizard, Druid, Engineer, He
     for i in range(x, 1980, x):
         for j in range(y, 1080, y):
             if (i < 1650 and j >= 118):
-                main.setBoomerang((i, j)) #Check initial
+                main.setMonkey(2, (i, j)) #Check initial
                 pyautogui.moveTo(40, 20)
                 time.sleep(0.1)
                 pix = pyautogui.pixel(i, j)
@@ -121,7 +120,7 @@ def createLargeGrid(): #For Spikes, Churchill, and Pat Fusty
     for i in range(x, 1980, x):
         for j in range(y, 1080, y):
             if (i < 1650 and j >= 118):
-                main.setSpike((i, j)) #Check initial
+                main.setMonkey(20, (i, j)) #Check initial
                 pyautogui.moveTo(40, 20)
                 time.sleep(0.1)
                 pix = pyautogui.pixel(i, j)
@@ -146,7 +145,7 @@ def createAceGrid(): #For Aces
     for i in range(x, 1980, x):
         for j in range(y, 1080, y):
             if (i < 1650 and j >= 118):
-                main.setAce((i, j)) #Check initial
+                main.setMonkey(10, (i, j)) #Check initial
                 pyautogui.moveTo(40, 20)
                 time.sleep(0.1)
                 pix = pyautogui.pixel(i, j+37)
@@ -171,7 +170,7 @@ def createHeliGrid(): #For Helis
     for i in range(x, 1980, x):
         for j in range(y, 1080, y):
             if (i < 1650 and j >= 118):
-                main.setHeli((i, j)) #Check initial
+                main.setMonkey(11, (i, j)) #Check initial
                 pyautogui.moveTo(40, 20)
                 time.sleep(0.1)
                 pix = pyautogui.pixel(i, j+58)
