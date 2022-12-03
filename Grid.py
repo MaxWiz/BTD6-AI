@@ -38,8 +38,8 @@ def findDiag(x, y):
         main.setMonkey(1, (n, y - 46))
 
 def findRed(pos):
-    for j in range(50):
-        if pyautogui.pixel(pos[0], pos[1]+j)[0] == 255 and pyautogui.pixel(pos[0], pos[1]+j)[1] == 0 and pyautogui.pixel(pos[0], pos[1]+j)[2] == 0:
+    for j in range(61):
+        if pyautogui.pixel(pos[0], pos[1]-j)[0] == 255 and pyautogui.pixel(pos[0], pos[1]-j)[1] == 0 and pyautogui.pixel(pos[0], pos[1]-j)[2] == 0:
             return j
     return None
         
@@ -123,13 +123,13 @@ def createLargeGrid(): #For Spikes, Churchill, and Pat Fusty
                 main.setMonkey(20, (i, j)) #Check initial
                 pyautogui.moveTo(40, 20)
                 time.sleep(0.1)
-                pix = pyautogui.pixel(i, j)
+                pix = pyautogui.pixel(i, j-60)
                 if pix[0] == 255 and pix[1] == 0 and pix[2] == 0: # Check if it's red
                     NPlaceable[(i, j)] = 0
                 else: #If not red, it's placeable
                     Placeable[(i, j)] = 0
                 pyautogui.moveTo(1, 1)
-    file1 = open(r"C:\Users\maxwi\Documents\GitHub\BTD6-AI\MMLa.txt", "a")
+    file1 = open(r"C:\Users\Max\Documents\GitHub\BTD6-AI\MMLa.txt", "a")
     for key in Placeable.keys():
         file1.write(str(key) + "\n")
     file1.write("\n")
