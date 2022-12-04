@@ -3,11 +3,18 @@
 import pyautogui
 import time
 from pynput.keyboard import Key, Controller
-import numpy
 import operator
 import subprocess
 import grid
 import random
+import math
+
+##################################### STATIC VARIABLES #####################################
+
+githubDir = r"C:\Users\maxwi\Documents\GitHub\BTD6-AI" # For laptop
+# githubDir = r"C:\Users\maxwi\Documents\GitHub\BTD6-AI\\" # For Desktop
+steamDir = r"D:\Steam" # For laptop
+# steamDir = r"C:\Program Files (x86)\Steam" # For desktop
 
 ##################################### UI COMMANDS #####################################
 
@@ -37,11 +44,9 @@ def clickSandbox():
     time.sleep(0.3)
 
 def startBloons():
-    # subprocess.call(r"D:\Steam\steam.exe -applaunch 960090") # Path for Desktop
-    # time.sleep(7) # Sleep for Desktop
-    subprocess.call(r"C:\Program Files (x86)\Steam\steam.exe -applaunch 960090") # Path for Desktop
-    subprocess.call(r"D:\Steam\steam.exe -applaunch 960090") # Path for laptop
-    time.sleep(9) # Sleep for laptop
+    global steamDir
+    subprocess.call(steamDir + r"\steam.exe -applaunch 960090") # App ID might be unique?
+    time.sleep(9) # Sleep for laptop, could be shorter for better computers?
     pyautogui.moveTo(941, 985) #Clicks the start button and gets through the intro
     pyautogui.click()
     time.sleep(1)
@@ -65,16 +70,16 @@ def startMMSandbox():
 def startGame():
     keyB = Controller()
     keyB.press(Key.space)
-    time.sleep(0.1)
+    time.sleep(0.2)
     keyB.release(Key.space)
     keyB.press(Key.space)
-    time.sleep(0.1)
+    time.sleep(0.2)
     keyB.release(Key.space)
 
 def nextRound():
     keyB = Controller()
     keyB.press(Key.space)
-    time.sleep(0.1)
+    time.sleep(0.2)
     keyB.release(Key.space)
     
 def restartFromLose():
@@ -85,7 +90,7 @@ def restartFromLose():
 def restartFromMenu():
     keyB = Controller()
     keyB.press(Key.esc)
-    time.sleep(0.1)
+    time.sleep(0.2)
     keyB.release(Key.esc)
     time.sleep(0.2)
     pyautogui.click(1157, 725)
@@ -155,9 +160,54 @@ def setMonkey(index, point):
     pyautogui.moveTo(point[0], point[1])
     key = getMonkeyButton(index)
     keyB.press(key)
+    time.sleep(0.2)
     keyB.release(key)
-    time.sleep(0.1)
+    time.sleep(0.2)
     pyautogui.click(point[0], point[1])
+    if index == 7: # Set snipers to strong
+        pyautogui.click(point[0], point[1])
+        time.sleep(0.1)
+        keyB.press(Key.tab)
+        time.sleep(0.1)
+        keyB.release(Key.tab)
+        time.sleep(0.1)
+        keyB.press(Key.tab)
+        time.sleep(0.1)
+        keyB.release(Key.tab)
+        time.sleep(0.1)
+        keyB.press(Key.tab)
+        time.sleep(0.1)
+        keyB.release(Key.tab)
+        time.sleep(0.1)
+        keyB.press(Key.esc)
+        time.sleep(0.1)
+        keyB.release(Key.esc)
+    if index == 13: #Set gatlings to target something, edit to entrance later
+        pyautogui.moveTo(573, 453)
+        time.sleep(0.1)
+        keyB.press(Key.tab)
+        time.sleep(0.1)
+        keyB.release(Key.tab)
+        time.sleep(0.1)
+        keyB.press(Key.esc)
+        time.sleep(0.1)
+        keyB.release(Key.esc)
+    if index == 11: # Set helis to patrol
+        pyautogui.click(point[0], point[1])
+        time.sleep(0.1)
+        keyB.press(Key.tab)
+        time.sleep(0.1)
+        keyB.release(Key.tab)
+        time.sleep(0.1)
+        keyB.press(Key.tab)
+        time.sleep(0.1)
+        keyB.release(Key.tab)
+        time.sleep(0.1)
+        keyB.press(Key.esc)
+        time.sleep(0.1)
+        keyB.release(Key.esc)
+
+
 
 def getUpgradeButton(index):
     if index == 0:
@@ -172,9 +222,10 @@ def upgrade(index, point):
     pyautogui.click(point[0], point[1])
     key = getUpgradeButton(index)
     keyB.press(key)
-    time.sleep(0.1)
+    time.sleep(0.2)
     keyB.release(key)
     keyB.press(Key.esc)
+    time.sleep(0.1)
     keyB.release(Key.esc)
 
 def sellTower(point):
@@ -188,7 +239,8 @@ def sellTower(point):
 
 def isStopped():
     screen = pyautogui.screenshot(region=(1650, 950, 330, 130))
-    return len(list(pyautogui.locateAll(r"C:\Users\Max\Documents\GitHub\BTD6-AI\start.png", screen))) != 0
+    return len(list(pyautogui.locateAll(r"C:\Users\maxwi\Documents\GitHub\BTD6-AI\start.png", screen))) != 0
+    # return len(list(pyautogui.locateAll(r"C:\Users\Max\Documents\GitHub\BTD6-AI\start.png", screen))) != 0
 
 def isLose():
     r = 0
@@ -211,22 +263,25 @@ def isWin():
     return True
 
 def findNums(): # Maybe alter to take in a screen and then use it per location?
+    # Definitely edit to take smaller spaces
+    global githubDir
+    pathStr = githubDir
     ret = [0, 0, 0]
     lives = {}
     cash = {}
     roun = {}
     gen = {0: {}, 1: {}, 2: {}, 3: {}, 4: {}, 5: {}, 6: {}, 7: {}, 8 : {}, 9: {}}
     screen = pyautogui.screenshot(region=(0, 0, 1650, 150))
-    zer = pyautogui.locateAll(r"C:\Users\Max\Documents\GitHub\BTD6-AI\p0.png", screen, confidence = 0.8)
-    one = pyautogui.locateAll(r"C:\Users\Max\Documents\GitHub\BTD6-AI\p1.png", screen, confidence = 0.85)
-    two = pyautogui.locateAll(r"C:\Users\Max\Documents\GitHub\BTD6-AI\p2.png", screen, confidence = 0.8)
-    thr = pyautogui.locateAll(r"C:\Users\Max\Documents\GitHub\BTD6-AI\p3.png", screen, confidence = 0.8)
-    fou = pyautogui.locateAll(r"C:\Users\Max\Documents\GitHub\BTD6-AI\p4.png", screen, confidence = 0.8)
-    fiv = pyautogui.locateAll(r"C:\Users\Max\Documents\GitHub\BTD6-AI\p5.png", screen, confidence = 0.8)
-    six = pyautogui.locateAll(r"C:\Users\Max\Documents\GitHub\BTD6-AI\p6.png", screen, confidence = 0.8)
-    sev = pyautogui.locateAll(r"C:\Users\Max\Documents\GitHub\BTD6-AI\p7.png", screen, confidence = 0.8)
-    eig = pyautogui.locateAll(r"C:\Users\Max\Documents\GitHub\BTD6-AI\p8.png", screen, confidence = 0.8)
-    nin = pyautogui.locateAll(r"C:\Users\Max\Documents\GitHub\BTD6-AI\p9.png", screen, confidence = 0.8)
+    zer = pyautogui.locateAll(pathStr + r"\p0.png", screen, confidence = 0.8)
+    one = pyautogui.locateAll(pathStr + r"\p1.png", screen, confidence = 0.85)
+    two = pyautogui.locateAll(pathStr + r"\p2.png", screen, confidence = 0.8)
+    thr = pyautogui.locateAll(pathStr + r"\p3.png", screen, confidence = 0.8)
+    fou = pyautogui.locateAll(pathStr + r"\p4.png", screen, confidence = 0.8)
+    fiv = pyautogui.locateAll(pathStr + r"\p5.png", screen, confidence = 0.8)
+    six = pyautogui.locateAll(pathStr + r"\p6.png", screen, confidence = 0.8)
+    sev = pyautogui.locateAll(pathStr + r"\p7.png", screen, confidence = 0.8)
+    eig = pyautogui.locateAll(pathStr + r"\p8.png", screen, confidence = 0.8)
+    nin = pyautogui.locateAll(pathStr + r"\p9.png", screen, confidence = 0.8)
     for a in zer:
         t = True
         for z in gen[0].keys():
@@ -453,6 +508,18 @@ def upgradeListEasy():
 
 ##################################### CLASSES #####################################
 
+class ActionProb:
+
+    def __init__(self, action, probability):
+        self.action = action
+        self.prob = probability
+
+    def __lt__(self, ActionProb):
+        return self.prob < ActionProb.prob
+
+    def __str__(self) -> str:
+        return "(" + str(self.action) + ", " + str (self.prob) + ")"
+
 class State:
 
     def __init__(self, monkeyList, lives, cash, evaluationScore):
@@ -483,17 +550,19 @@ class State:
             return False
         if self.monkeyList != __o.monkeyList:
             return False
-        if self.lives != __o.lives:
-            return False
-        if self.cash != __o.cash:
-            return False
-        return True     
+        # if self.lives != __o.lives:
+        #     return False
+        # if self.cash != __o.cash:
+        #     return False
+        return True   
+  
 class Monkey:
     
     def __init__(self, position, index):
         self.upgrades = [0, 0, 0]
-        self.name = self.getName(index) # Maybe unneeded?
-        self.block = False
+        self.name = self.getName(index) # Maybe unneeded, kinda nice for print outs
+        self.block = False # To prevent upgrading in 3 paths
+        self.tblock = False # To prevent upgrading to level 3 in two paths
         self.position = position
         self.PUindex = index
     
@@ -571,12 +640,18 @@ class Player:
     def availUpgrades(self, cash):
         uList = []
         for m in self.monkeys: # Iterate through all the monkeys we have set down
+            # print(m.name)
             up = m.upgrades
             i = m.PUindex
             for j in range(3): # Iterate through all possible upgrades
                 if not up[j] == None: # Check that it is not an impossible upgrade
-                    k = up[j] + 1
-                    if self.upgradeList[i][j][k] <= cash: # Check that we can afford it
+                    k = up[j]
+                    # print("PUindex: " + str(i) + ", Upgrade path: " + str(j) + ", Upgrade Level: " + str(k))
+                    # print(self.upgradeList[i][j][k])
+
+                    # if (m.tblock == True and k + 1 == 3):
+                    #         print("check blocked")
+                    if self.upgradeList[i][j][k] <= cash and not (m.tblock == True and k + 1 == 3): # Check that we can afford it
                         z = (m, j)
                         uList.append(z) # Appends a (monkey, upgrade index)
         return uList
@@ -612,7 +687,10 @@ class Player:
         if not monkey.upgrades[upgradeIndex] == None:
             upgrade(upgradeIndex, monkey.position)
             monkey.upgrades[upgradeIndex] += 1
-            self.cash -= self.upgradeList[monkey.PUindex][upgradeIndex][monkey.upgrades[upgradeIndex]]
+            if monkey.upgrades[upgradeIndex] == 3:
+                # print("blocked")
+                monkey.tblock = True
+            self.cash -= self.upgradeList[monkey.PUindex][upgradeIndex][monkey.upgrades[upgradeIndex]-1]
             if not monkey.block:
                 if monkey.upgrades[0] >= 1 and monkey.upgrades[1] >= 1:
                     monkey.upgrades[2] = None
@@ -797,13 +875,30 @@ class Player:
             for nt4 in nList4:
                 self.HeGrid.remove(nt4)
 
-def evaluate(startingCash, state, lose): # Evaluate should always be called at the end of the round, it represents how well that state did that round
-        ret = 0
-        
+def evaluate(startingCash, endingCash, startingLives, endingLives, lose, win): # Evaluate should always be called at the end of the round, it represents how well that state did that round
+        # The constants changed here will determine how much the AI values these parameters
+        cScore = 100 - (startingCash - endingCash)/500
+        liScore = -50*(((startingLives - endingLives)/25)**(1/3))
+        lScore = 0
+        wScore = 0
+        if lose:
+            lScore = -100
+        if win:
+            wScore = 100
+        tot = cScore + liScore + lScore + wScore # Possibly normalize?
+        n = tot/50
+        norm = ((math.exp(n) - math.exp(-n))/(2*(math.exp(n) + math.exp(-n)))) + .5
+        return norm
+
+def resetVal():
+    with open(githubDir + r"\MMVal.txt", "w") as test:
+        for i in range(40):
+            test.write(str(i + 1) + ":\n")
 
 ##################################### MAIN #####################################
 
 def main():
+    global githubDir
     smL = []
     meL = []
     laL = []
@@ -812,35 +907,35 @@ def main():
     pL = priceListEasy()
     uL = upgradeListEasy()
     Player1 = Player(pL, uL)
-    with open(r"C:\Users\Max\Documents\GitHub\BTD6-AI\MMSm.txt", "r") as fSm:
+    with open(githubDir + r"\MMSm.txt", "r") as fSm:
         line = fSm.readline()
         while(line != "\n"):
             l = line.replace("(", "").replace(")", "").replace("\n", "").replace(" ", "").split(",")
             p = (int(l[0]), int(l[1]))
             smL.append(p)
             line = fSm.readline()
-    with open(r"C:\Users\Max\Documents\GitHub\BTD6-AI\MMMe.txt", "r") as fMe:
+    with open(githubDir + r"\MMMe.txt", "r") as fMe:
         line = fMe.readline()
         while(line != "\n"):
             l = line.replace("(", "").replace(")", "").replace("\n", "").replace(" ", "").split(",")
             p = (int(l[0]), int(l[1]))
             meL.append(p)
             line = fMe.readline()
-    with open(r"C:\Users\Max\Documents\GitHub\BTD6-AI\MMLa.txt", "r") as fLa:
+    with open(githubDir + r"\MMLa.txt", "r") as fLa:    
         line = fLa.readline()
         while(line != "\n"):
             l = line.replace("(", "").replace(")", "").replace("\n", "").replace(" ", "").split(",")
             p = (int(l[0]), int(l[1]))
             laL.append(p)
             line = fLa.readline()
-    with open(r"C:\Users\Max\Documents\GitHub\BTD6-AI\MMAc.txt", "r") as fAc:
+    with open(githubDir + r"\MMAc.txt", "r") as fAc:
         line = fAc.readline()
         while(line != "\n"):
             l = line.replace("(", "").replace(")", "").replace("\n", "").replace(" ", "").split(",")
             p = (int(l[0]), int(l[1]))
             acL.append(p)
             line = fAc.readline()
-    with open(r"C:\Users\Max\Documents\GitHub\BTD6-AI\MMHe.txt", "r") as fHe:
+    with open(githubDir + r"\MMHe.txt", "r") as fHe:
         line = fHe.readline()
         while(line != "\n"):
             l = line.replace("(", "").replace(")", "").replace("\n", "").replace(" ", "").split(",")
@@ -853,71 +948,118 @@ def main():
     Player1.AcGrid = acL
     Player1.HeGrid = heL
     
-    # with open(r"C:\Users\Max\Documents\GitHub\BTD6-AI\MMVal.txt", "w") as test:
-    #         for i in range(40):
-    #             test.write(str(i + 1) + ",\n")
     val = {} # Val will be our policy values, defined as a dictionary with:
-            #Round: (position), index, place, upgrade, score, i.e. :
-            # 1 : [[[(monkey index i, position(x, y), upgrades [a, b, c]), ...], lives, cash, evaluation score], [...]]
-            #1 : [(150, 260), 1, 1, None, 270] is a dart monkey placed on round one at the position
-    with open(r"C:\Users\Max\Documents\GitHub\BTD6-AI\MMVal.txt", "r") as fVal:
+    #Round: (position), index, place, upgrade, score, i.e. :
+    # 1 : [[[(monkey index i, position(x, y), upgrades [a, b, c]), ...], lives, cash, evaluation score], [...]]
+    with open(githubDir + r"\MMVal.txt", "r") as fVal:
         line = fVal.readline()
         while(line != "\n" and line != ""):
-            l = line.replace("\n", "").split(",") # Might need split commands
-            key = l.pop(0)
-            value = l
-            val[key] =  value
+            l = line.replace("\n", "").split(":") # Split the line by ":" so that the first element of the list is the round number, and the remaining elements are states
+            key = int(l.pop(0)) # Get the round number on its own
+            stList = []
+            for state in l: # Continue with the list of states
+                l2 = state.replace(", ", ",").replace("[", "").replace("(", "").replace(")", "").replace("]]", "]") # Produces a string with only "]"s separating the important groups, with all monkeys first and then the lives, cash, and eval in the final list item
+                # print(l2)
+                l3 = l2.split("]") # Separates the list into the form described on l2
+                l3.pop(len(l3)-1) # Gets rid of an odd empty space left over from remove("\n") I think?
+                # print(l3)
+                mList = []
+                if not len(l3) == 0:
+                    for mI in range(len(l3)-1): # We want to ignore the last element, since it is not a monkey
+                        l4 = l3[mI].split(",")
+                        if l4[0] == "":
+                            l4.pop(0)
+                        # print(l4)
+                        m = Monkey((int(l4[1]), int(l4[2])), int(l4[0])) # Generate a monkey
+                        for i in range(3): # Set it's upgrades to the proper values
+                            if not l4[3+i] == "None":
+                                m.upgrades[i] = int(l4[3+i])
+                            else:
+                                m.upgrades[i] = None
+                        mList.append(m)
+                    # print(mList)
+                    l5 = l3[-1].split(",")
+                    l5.pop(0)
+                    # print(l5)
+                    st = State(mList, int(l5[0]), int(l5[1]), float(l5[2]))
+                    #print(st)
+                    stList.append(st)
+            val[key] = stList
             line = fVal.readline()
-    # print(val)
+    print("Values" + str(val))
     
     roundNum = 1
     time.sleep(2) # Maybe unneeded?
-    while roundNum <= 41:
-        if isStopped(): # If we have started a round, we want to make a move
-            lcr = findNums()
-            lives = lcr[0]
-            cash = lcr[1]
-            print("\nLives: " + str(lives) + " Cash: " + str(cash) + " Round: " + str(roundNum))
-            Player1.cash = cash
+    while roundNum <= 40: # Maybe generically type so that it can be changed depending on difficulty
+        slives = Player1.lives
+        
+        if isStopped() and not isWin(): # If we have started a round, we want to make a move
+
+            sCash = Player1.cash
+            print("\nLives: " + str(Player1.lives) + " Cash: " + str(Player1.cash) + " Round: " + str(roundNum))
+
             mList = []
             for m in Player1.monkeys:
                 stm = str(m.name) + ":" + str(m.upgrades[0]) + ", " + str(m.upgrades[1]) + ", " + str(m.upgrades[2])
                 mList.append(stm)
             print("Starting Monkeys are: " + str(mList))
             
-            pO = 7 * len(Player1.SmGrid) + 7 * len(Player1.MeGrid) + len(Player1.LaGrid) + len(Player1.AcGrid) + len(Player1.HeGrid)
-            print("Available Placement Options with infinite money: " + str(pO))
-            tavailP = Player1.availPlacement(2000)
-            print("Available Placement Options with $2000: " + str(len(tavailP)))
+            # pO = 7 * len(Player1.SmGrid) + 7 * len(Player1.MeGrid) + len(Player1.LaGrid) + len(Player1.AcGrid) + len(Player1.HeGrid) # This is just a raw maximum
+            # print("Available Placement Options with infinite money: " + str(pO))
+            tavailP = Player1.availPlacement(3000)
+            print("Available Placement Options with infinite money: " + str(len(tavailP)))
             
             n1 = random.randint(0, 3) #Placement odds
-            n2 = random.randint(0, 2) #Upgrade odds
-              
-            availP = Player1.availPlacement(cash)
-            r1 = random.randint(0, len(availP))
+            n2 = random.randint(1, 1) #Upgrade odds
+            
+            knownStates = val[roundNum] # Get the list of states we have seen before
+            actProbList = []
+
+            availP = Player1.availPlacement(Player1.cash) # Generate the available placement options
+            noChangeState = State(Player1.monkeys.copy(), 0, 0, 1)
+            for k1 in knownStates:
+                if noChangeState == k1:
+                    noChangeState.evaluationScore = k1.evaluationScore
+            noChangeAct = ActionProb(None, noChangeState.evaluationScore)
+            actProbList.append(noChangeAct)
+            for availPl in availP:
+                mListCopy = Player1.monkeys.copy()
+                projM = Monkey(availPl[0], availPl[1])
+                mListCopy.append(projM)
+                projState = State(mListCopy, 0, 0, 1)
+                for k in knownStates:
+                    if projState == k:
+                        projState.evaluationScore = k.evaluationScore
+                actP = ActionProb(availPl, projState.evaluationScore)
+                # print(actP)
+                actProbList.append(actP)
+            actProbList.sort()
+            for abs in actProbList:
+                print(abs)
+            r1 = random.randint(0, len(availP)) # Generate a random number that is within the range of the placement options
             if len(availP) != 0:
-                print("Out of " + str(len(availP)) + " placement options, it chose " + str(r1) + " which is at " + str(availP[r1][0]) + ". Place was " + str(n1 == 1) + " and cash was: " + str(cash))
-            if (len(availP) != 0 and n1 == 1) or roundNum == 1:
-                s1 = availP[r1]
+                print("Out of " + str(len(availP)) + " placement options, it chose " + str(r1-1) + " which is at " + str(availP[r1-1][0]) + ". Place was " + str(n1 == 1) + " and cash was: " + str(Player1.cash))
+            if (len(availP) != 0 and n1 == 1) or roundNum == 1: # We always want to place a tower on round 1, obviously
+                s1 = availP[r1-1]
                 Player1.placeM(s1[0], s1[1])
-                print("It placed " + str(Player1.monkeys[-1].name) + " at: " + str(s1[0]))
+                mTest = Monkey(s1[0], s1[1])
+                print("It placed " + str(mTest.name) + " at: " + str(s1[0]))
             
-            cash = Player1.cash
+            # cash = Player1.cash # Set cash so that we have the correct amount for upgrades, this could likely be handled inside the Player class
             
-            availU = Player1.availUpgrades(cash)
-            r2 = random.randint(0, len(availU))
-            print("Out of " + str(len(availU)) + " upgrade options, it chose " + str(r2) + ". Upgrade was " + str(n2 == 1) + " and cash was: " + str(cash))
+            availU = Player1.availUpgrades(Player1.cash) # Generate the available upgrades, AFTER placement
+            r2 = random.randint(0, len(availU)) # Generate a random number that is within the range of the upgrade options
+            print("Out of " + str(len(availU)) + " upgrade options, it chose " + str(r2) + ". Upgrade was " + str(n2 == 1) + " and cash was: " + str(Player1.cash))
             # print("Avail U:" + str(availU))
             if len(availU) != 0 and n2 == 1:
                 s2 = availU[r2-1]
                 Player1.upgradeM(s2[0], s2[1])
                 print("Upgraded " + str(s2[0].name) + " at " + str(s2[0].position) + " to " + str(s2[0].upgrades[0]) + str(s2[0].upgrades[1]) + str(s2[0].upgrades[2]))
                 
-            pyautogui.moveTo(1700, 1000)
-            
-            
-            stateTest = State(Player1.monkeys, lives, cash, 0)
-            print(stateTest)
+            # cash = Player1.cash
+            # print(cash)
+
+            pyautogui.moveTo(1700, 1000) # Move to an idle location where the mouse will not be in the way
             
             if roundNum == 1:
                 startGame()
@@ -926,28 +1068,46 @@ def main():
             time.sleep(1)
         else: # Otherwise we just want to wait
             lose = False
+            win = False
             roundEnd = False
-            while roundEnd == False and lose == False:
+            while roundEnd == False and lose == False and win == False:
                 time.sleep(1)
-                if isStopped():
+                if isWin():
+                    print("YAY")
+                    win = True
+                elif isStopped():
                     roundEnd = True
-                if isLose():
+                elif isLose():
                     print("DAMN")
                     lose = True
-            if lose == True:
+            lcr = findNums() # Grab the lives, cash, and round number, last likely unneeded
+            Player1.lives = lcr[0]
+            eScore = evaluate(sCash, Player1.cash, slives, Player1.lives, lose, win)
+            stateRoundEnd = State(Player1.monkeys.copy(), Player1.lives, Player1.cash, eScore)
+            print(stateRoundEnd)
+            Player1.cash = lcr[1]
+            val[roundNum].append(stateRoundEnd)
+            if lose == True or win == True:
+                with open(githubDir + r"\MMVal.txt", "w") as wFile:
+                    for key in val.keys():
+                        wFile.write(str(key) + ":")
+                        for state in val[key]:
+                            wFile.write(str(state) + ":")
+                        wFile.write("\n")
                 break
             roundNum += 1
     return 0
 
 def main1():
     time.sleep(1)
-    print(isWin())
+    # startBloons()
     print(pyautogui.position())
-    
+
     # start = time.time()
     # print(findNums())
     # end = time.time()
     # print(end - start)
 
 if __name__ == "__main__":
-    main1()
+    resetVal()
+    main()
