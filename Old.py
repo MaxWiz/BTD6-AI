@@ -88,3 +88,25 @@ def findRound():
         one = 0
     r = (100 * hun) + (10 * ten) + (one)
     return r
+
+def oldMain(): # Old code that was removed from main
+            # r1 = random.randint(0, len(availP)) # Generate a random number that is within the range of the placement options
+            # if len(availP) != 0:
+            #     print("Out of " + str(len(availP)) + " placement options, it chose " + str(r1-1) + " which is at " + str(availP[r1-1][0]) + ". Place was " + str(n1 == 1) + " and cash was: " + str(Player1.cash))
+            # if (len(availP) != 0 and n1 == 1) or roundNum == 1: # We always want to place a tower on round 1, obviously
+            #     s1 = availP[r1-1]
+            #     Player1.placeM(s1[0], s1[1])
+            #     mTest = Monkey(s1[0], s1[1])
+            #     print("It placed " + str(mTest.name) + " at: " + str(s1[0]))
+            
+            # cash = Player1.cash # Set cash so that we have the correct amount for upgrades, this could likely be handled inside the Player class
+            
+            # availU = Player1.availUpgrades(Player1.cash) # Generate the available upgrades, AFTER placement
+            # r2 = random.randint(0, len(availU)) # Generate a random number that is within the range of the upgrade options
+            # print("Out of " + str(len(availU)) + " upgrade options, it chose " + str(r2) + ". Upgrade was " + str(n2 == 1) + " and cash was: " + str(Player1.cash))
+            # # print("Avail U:" + str(availU))
+            # if len(availU) != 0 and n2 == 1:
+            #     s2 = availU[r2-1]
+            #     Player1.upgradeM(s2[0], s2[1])
+            #     print("Upgraded " + str(s2[0].name) + " at " + str(s2[0].position) + " to " + str(s2[0].upgrades[0]) + str(s2[0].upgrades[1]) + str(s2[0].upgrades[2]))
+    return 0

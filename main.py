@@ -11,10 +11,11 @@ import math
 
 ##################################### STATIC VARIABLES #####################################
 
-githubDir = r"C:\Users\maxwi\Documents\GitHub\BTD6-AI" # For laptop
-# githubDir = r"C:\Users\maxwi\Documents\GitHub\BTD6-AI\\" # For Desktop
-steamDir = r"D:\Steam" # For laptop
-# steamDir = r"C:\Program Files (x86)\Steam" # For desktop
+# githubDir = r"C:\Users\maxwi\Documents\GitHub\BTD6-AI" # For laptop
+# steamDir = r"D:\Steam" # For laptop
+
+githubDir = r"C:\Users\Max\Documents\GitHub\BTD6-AI\\" # For Desktop
+steamDir = r"C:\Program Files (x86)\Steam" # For desktop
 
 ##################################### UI COMMANDS #####################################
 
@@ -183,6 +184,7 @@ def setMonkey(index, point):
         time.sleep(0.1)
         keyB.release(Key.esc)
     if index == 13: #Set gatlings to target something, edit to entrance later
+        pyautogui.click(point[0], point[1])
         pyautogui.moveTo(573, 453)
         time.sleep(0.1)
         keyB.press(Key.tab)
@@ -206,8 +208,6 @@ def setMonkey(index, point):
         keyB.press(Key.esc)
         time.sleep(0.1)
         keyB.release(Key.esc)
-
-
 
 def getUpgradeButton(index):
     if index == 0:
@@ -238,8 +238,9 @@ def sellTower(point):
 ##################################### SCREEN READING COMMANDS #####################################
 
 def isStopped():
+    global githubDir
     screen = pyautogui.screenshot(region=(1650, 950, 330, 130))
-    return len(list(pyautogui.locateAll(r"C:\Users\maxwi\Documents\GitHub\BTD6-AI\start.png", screen))) != 0
+    return len(list(pyautogui.locateAll(githubDir + r"\start.png", screen))) != 0
     # return len(list(pyautogui.locateAll(r"C:\Users\Max\Documents\GitHub\BTD6-AI\start.png", screen))) != 0
 
 def isLose():
@@ -616,6 +617,9 @@ class Monkey:
             return "Village"
         if index == 22: # Engi
             return "Engi"
+    
+    def __str__(self) -> str:
+        return str(self.name) + ": [" + str(self.upgrades[0]) + ", " + str(self.upgrades[1]) + ", " + str(self.upgrades[2]) + "]"
 
 class Player:
 
@@ -701,6 +705,24 @@ class Player:
                 elif monkey.upgrades[0] >= 1 and monkey.upgrades[2] >= 1:
                     monkey.upgrades[1] = None
                     monkey.block = True
+    
+    def projUp(self, monkey, upgradeIndex):
+        if not monkey.upgrades[upgradeIndex] == None:
+            monkey.upgrades[upgradeIndex] += 1
+            if monkey.upgrades[upgradeIndex] == 3:
+                # print("blocked")
+                monkey.tblock = True
+            if not monkey.block:
+                if monkey.upgrades[0] >= 1 and monkey.upgrades[1] >= 1:
+                    monkey.upgrades[2] = None
+                    monkey.block = True
+                elif monkey.upgrades[1] >= 1 and monkey.upgrades[2] >= 1:
+                    monkey.upgrades[0] = None
+                    monkey.block = True
+                elif monkey.upgrades[0] >= 1 and monkey.upgrades[2] >= 1:
+                    monkey.upgrades[1] = None
+                    monkey.block = True
+        return monkey
 
     def placeM(self, position, puIndex):
         setMonkey(puIndex, position)
@@ -877,8 +899,8 @@ class Player:
 
 def evaluate(startingCash, endingCash, startingLives, endingLives, lose, win): # Evaluate should always be called at the end of the round, it represents how well that state did that round
         # The constants changed here will determine how much the AI values these parameters
-        cScore = 100 - (startingCash - endingCash)/500
-        liScore = -50*(((startingLives - endingLives)/25)**(1/3))
+        cScore = 70 - (startingCash - endingCash)/500
+        liScore = -70*(((startingLives - endingLives)/25)**(1/3))
         lScore = 0
         wScore = 0
         if lose:
@@ -894,6 +916,27 @@ def resetVal():
     with open(githubDir + r"\MMVal.txt", "w") as test:
         for i in range(40):
             test.write(str(i + 1) + ":\n")
+            
+def selectBasedOnProb(actionList, probCutoff):
+    retList = []
+    oneList = []
+    oneT = False
+    for act in actionList:
+        a1 = act.prob
+        if a1 >= probCutoff:
+            if a1 == 1:
+                oneList.append(act)
+                oneT = True
+            else:
+                retList.append(act)
+    if oneT:
+        retList = oneList.copy()
+    ret = ActionProb(None, 0) # Do nothing by default if we have no options
+    if len(retList) != 0:
+        print("Actions that made the cutoff: " + str(len(retList)))
+        rNum = random.randint(0, len(retList)-1) # Maybe use a weighting function?
+        ret = retList[rNum]
+    return ret
 
 ##################################### MAIN #####################################
 
@@ -970,13 +1013,14 @@ def main():
                         if l4[0] == "":
                             l4.pop(0)
                         # print(l4)
-                        m = Monkey((int(l4[1]), int(l4[2])), int(l4[0])) # Generate a monkey
-                        for i in range(3): # Set it's upgrades to the proper values
-                            if not l4[3+i] == "None":
-                                m.upgrades[i] = int(l4[3+i])
-                            else:
-                                m.upgrades[i] = None
-                        mList.append(m)
+                        if len(l4) != 0:
+                            m = Monkey((int(l4[1]), int(l4[2])), int(l4[0])) # Generate a monkey
+                            for i in range(3): # Set it's upgrades to the proper values
+                                if not l4[3+i] == "None":
+                                    m.upgrades[i] = int(l4[3+i])
+                                else:
+                                    m.upgrades[i] = None
+                            mList.append(m)
                     # print(mList)
                     l5 = l3[-1].split(",")
                     l5.pop(0)
@@ -986,7 +1030,7 @@ def main():
                     stList.append(st)
             val[key] = stList
             line = fVal.readline()
-    print("Values" + str(val))
+    # print("Values" + str(val))
     
     roundNum = 1
     time.sleep(2) # Maybe unneeded?
@@ -1000,7 +1044,7 @@ def main():
 
             mList = []
             for m in Player1.monkeys:
-                stm = str(m.name) + ":" + str(m.upgrades[0]) + ", " + str(m.upgrades[1]) + ", " + str(m.upgrades[2])
+                stm = str(m)
                 mList.append(stm)
             print("Starting Monkeys are: " + str(mList))
             
@@ -1009,24 +1053,28 @@ def main():
             tavailP = Player1.availPlacement(3000)
             print("Available Placement Options with infinite money: " + str(len(tavailP)))
             
-            n1 = random.randint(0, 3) #Placement odds
-            n2 = random.randint(1, 1) #Upgrade odds
+            # n1 = random.randint(0, 3) #Placement odds
+            # n2 = random.randint(1, 1) #Upgrade odds
             
             knownStates = val[roundNum] # Get the list of states we have seen before
             actProbList = []
+            upProbList = []
 
             availP = Player1.availPlacement(Player1.cash) # Generate the available placement options
-            noChangeState = State(Player1.monkeys.copy(), 0, 0, 1)
+            print("Available Placement Options with current cash: " + str(len(availP)))
+            
+            noChangeState = State(Player1.monkeys.copy(), 0, 0, .7)
             for k1 in knownStates:
                 if noChangeState == k1:
                     noChangeState.evaluationScore = k1.evaluationScore
             noChangeAct = ActionProb(None, noChangeState.evaluationScore)
-            actProbList.append(noChangeAct)
+            actProbList.append(noChangeAct) # All for getting the result of doing nothing on this round
+            
             for availPl in availP:
                 mListCopy = Player1.monkeys.copy()
                 projM = Monkey(availPl[0], availPl[1])
                 mListCopy.append(projM)
-                projState = State(mListCopy, 0, 0, 1)
+                projState = State(mListCopy, 0, 0, .5)
                 for k in knownStates:
                     if projState == k:
                         projState.evaluationScore = k.evaluationScore
@@ -1034,28 +1082,69 @@ def main():
                 # print(actP)
                 actProbList.append(actP)
             actProbList.sort()
-            for abs in actProbList:
-                print(abs)
-            r1 = random.randint(0, len(availP)) # Generate a random number that is within the range of the placement options
-            if len(availP) != 0:
-                print("Out of " + str(len(availP)) + " placement options, it chose " + str(r1-1) + " which is at " + str(availP[r1-1][0]) + ". Place was " + str(n1 == 1) + " and cash was: " + str(Player1.cash))
-            if (len(availP) != 0 and n1 == 1) or roundNum == 1: # We always want to place a tower on round 1, obviously
-                s1 = availP[r1-1]
-                Player1.placeM(s1[0], s1[1])
-                mTest = Monkey(s1[0], s1[1])
-                print("It placed " + str(mTest.name) + " at: " + str(s1[0]))
             
-            # cash = Player1.cash # Set cash so that we have the correct amount for upgrades, this could likely be handled inside the Player class
+            cutoff = random.random()
+            chAct = selectBasedOnProb(actProbList, cutoff)
+            print("Placement cutoff is: " + str(cutoff))
+            if not chAct.action == None:
+                print("Chosen placement is: " + str(chAct.action) + ", with probability: " + str(chAct.prob))
+                Player1.placeM(chAct.action[0], chAct.action[1])
+                mTest = Monkey(chAct.action[0], chAct.action[1])
+                print("It placed " + str(mTest.name) + " at: " + str(mTest.position))
+            else:
+                print("Chosen placement is: None, with probability: " + str(chAct.prob))
+            # for abs in actProbList:
+            #     print(abs)
             
-            availU = Player1.availUpgrades(Player1.cash) # Generate the available upgrades, AFTER placement
-            r2 = random.randint(0, len(availU)) # Generate a random number that is within the range of the upgrade options
-            print("Out of " + str(len(availU)) + " upgrade options, it chose " + str(r2) + ". Upgrade was " + str(n2 == 1) + " and cash was: " + str(Player1.cash))
-            # print("Avail U:" + str(availU))
-            if len(availU) != 0 and n2 == 1:
-                s2 = availU[r2-1]
-                Player1.upgradeM(s2[0], s2[1])
-                print("Upgraded " + str(s2[0].name) + " at " + str(s2[0].position) + " to " + str(s2[0].upgrades[0]) + str(s2[0].upgrades[1]) + str(s2[0].upgrades[2]))
-                
+            availU = Player1.availUpgrades(Player1.cash) # Generate the available placement options
+            
+            noChangeStateU = State(Player1.monkeys.copy(), 0, 0, .4)
+            for k2 in knownStates:
+                if noChangeStateU == k2:
+                    noChangeStateU.evaluationScore = k2.evaluationScore
+            noChangeActU = ActionProb(None, noChangeStateU.evaluationScore)
+            upProbList.append(noChangeActU) # All for getting the result of doing nothing on this round
+            
+            for availUp in availU:
+                mListCopyI = Player1.monkeys.copy()
+                mListCopyF = []
+                for mon in mListCopyI:
+                    pos = mon.position
+                    ind = mon.PUindex
+                    upg = mon.upgrades
+                    blk = mon.block
+                    tblk = mon.tblock
+                    tempMon = Monkey(pos, ind)
+                    tempMon.upgrades = upg
+                    tempMon.block = blk
+                    tempMon.tblk = tblk
+                    if tempMon == availUp[0]:
+                        upMon = Player1.projUp(tempMon, availUp[1])
+                        mListCopyF.append(upMon)
+                    else:
+                        mListCopyF.append(tempMon)
+                mListCopyF.sort()
+                projStateU = State(mListCopyF, 0, 0, .5)
+                for k3 in knownStates:
+                    if projStateU == k3:
+                        projStateU.evaluationScore = k3.evaluationScore
+                actU = ActionProb(availUp, projStateU.evaluationScore)
+                # print(actU)
+                # print(actU.action[0])
+                upProbList.append(actU)
+            upProbList.sort()
+            print("Available Upgrade Options with current cash: " + str(len(upProbList)))
+            
+            cutoffU = random.random()
+            chActU = selectBasedOnProb(upProbList, cutoffU)
+            print("Upgrade cutoff is: " + str(cutoffU))
+            if not chActU.action == None:
+                print("Chosen upgrade is on: " + str(chActU.action[0]) + ", upgrade path: " + str(chActU.action[1] + 1) + ", with probability: " + str(chActU.prob))
+                Player1.upgradeM(chActU.action[0], chActU.action[1])
+                print("Upgraded " + str(chActU.action[0].name) + " at " + str(chActU.action[0].position) + " to [" + str(chActU.action[0].upgrades[0]) + ", " + str(chActU.action[0].upgrades[1]) + ", " + str(chActU.action[0].upgrades[2]) + "]")
+            else:
+                print("Chosen upgrade is: None, with probability: " + str(chActU.prob))
+            
             # cash = Player1.cash
             # print(cash)
 
@@ -1083,7 +1172,7 @@ def main():
             lcr = findNums() # Grab the lives, cash, and round number, last likely unneeded
             Player1.lives = lcr[0]
             eScore = evaluate(sCash, Player1.cash, slives, Player1.lives, lose, win)
-            stateRoundEnd = State(Player1.monkeys.copy(), Player1.lives, Player1.cash, eScore)
+            stateRoundEnd = State(Player1.monkeys.copy(), Player1.lives, Player1.cash, eScore) # Can sometimes be fed imaginary numbers? Maybe fucks up if monkeys visually interfere with the top row?
             print(stateRoundEnd)
             Player1.cash = lcr[1]
             val[roundNum].append(stateRoundEnd)
@@ -1094,6 +1183,12 @@ def main():
                         for state in val[key]:
                             wFile.write(str(state) + ":")
                         wFile.write("\n")
+                if lose:
+                    restartFromLose()
+                    # main()
+                if win:
+                    restartFromWin()
+                    # main()
                 break
             roundNum += 1
     return 0
@@ -1109,5 +1204,5 @@ def main1():
     # print(end - start)
 
 if __name__ == "__main__":
-    resetVal()
-    main()
+    for i in range(10):
+        main()
